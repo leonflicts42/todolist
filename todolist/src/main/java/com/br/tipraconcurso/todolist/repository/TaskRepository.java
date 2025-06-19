@@ -6,5 +6,6 @@ import com.br.tipraconcurso.todolist.model.Task;
 
 @Repository
 public interface TaskRepository extends JpaRepository<Task, Long> {
-
+    // JpaRepository already provides methods like findAll, findById, save, deleteById, etc.
+    // You can define custom query methods here if needed.
 }
