@@ -26,25 +26,38 @@ public class TaskController {
     @Autowired
     private TaskRepository taskRepository;
 
+     @GetMapping("/hello") // Mapeia requisições GET para /hello
+    public String helloWorld() {
+        return "Olá do Spring Boot! Conexão OK!";
+    }
+
+    //Endpoint para obter todas as tarefas
+    // Mapeia requisições GET para /todolist/tasks
     @GetMapping
     public List<Task> getAllTasks(){
         return taskRepository.findAll();
     }
-
-    @GetMapping("/id")
-    public ResponseEntity<Task> getTaskById(@RequestParam Long id){
+    
+    //Endpoint para obter uma tarefa específica pelo ID
+    // Mapeia requisições GET para /todolist/tasks/{id}
+    @GetMapping("/{id}")
+    public ResponseEntity<Task> getTaskById(@PathVariable Long id){
         Optional<Task> task = taskRepository.findById(id);
         return task.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build()); 
     }
 
+    //Endpoint para criar uma nova tarefa
+    // Mapeia requisições POST para /todolist/tasks
     @PostMapping
     public ResponseEntity<Task> createTask(@RequestBody Task task){
         Task savedTask = taskRepository.save(task);
         return ResponseEntity.ok(savedTask);
     }
 
-    @PutMapping("/id")
-    public ResponseEntity<Task> updadeTask(@PathVariable Long id, @RequestBody Task taskDetail){
+    //Endpoint para atualizar uma tarefa existente
+    // Mapeia requisições PUT para /todolist/tasks/{id}
+    @PutMapping("/{id}")
+    public ResponseEntity<Task> updateTask(@PathVariable Long id, @RequestBody Task taskDetail){
         Optional<Task> task = taskRepository.findById(id);
         if(task.isPresent()){
             Task existingTask = task.get();
@@ -59,7 +72,7 @@ public class TaskController {
         }
     }
 
-    @DeleteMapping("/id")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTask(@PathVariable Long id){
         Optional<Task> task = taskRepository.findById(id);
         if(task.isPresent()){
